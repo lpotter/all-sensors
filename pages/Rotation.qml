@@ -29,25 +29,27 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 Page {
-    id: proxyPage
-
-    ProximitySensor {
-     id: prox
-     onErrorChanged: {
-     console.log("Error "+prox.error)
-     }
+    id: rotationPage
+    header: Label {
+        text: qsTr("QML Rotation")
     }
+
+    RotationSensor {
+        id: rotation
+        dataRate: 5
+    }
+
     Component.onCompleted: {
-     if (!prox.connectedToBackend) {
-         label.text = "Proximity sensor not connected to backend"
+     if (!rotation.connectedToBackend) {
+         label.text = "Rotation sensor not connected to backend"
      }
     }
 
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -55,27 +57,26 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Proximity Sensor")
-            }
+            width: rotationPage.width
+   //         spacing: Theme.paddingLarge
+//
             Label {
                 id: label
-                x: Theme.paddingLarge
-                text: prox.reading.near ? "near" : "far"
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+     //           x: Theme.paddingLarge
+                text: "X: "+rotation.reading.x+"\nY: "+ rotation.reading.y +"\nZ: " + rotation.reading.z
+     //           color: Theme.secondaryHighlightColor
+     //           font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: prox.active ? "Stop" : "start"
+                text: rotation.active ? "Stop" : "start"
                 onClicked: {
-                    prox.active = !prox.active
+                    rotation.active = !rotation.active
                 }
             }
         }
     }
+    Component.onDestruction: console.log("rotation destroyed")
 }
 
 

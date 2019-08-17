@@ -29,23 +29,50 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
+
 
 Page {
-    id: accelPage
+    id: orientationPage
+    header: Label {
+        text: qsTr("Device Orientation")
+    }
 
-    Accelerometer {
-        id: accel
-        dataRate: 5
+    OrientationSensor {
+        id: orientationSensor
+    }
+
+    function showOrientation(orient) {
+        switch (orient) {
+          case OrientationReading.TopUp:
+              return "Top Up"
+              break;
+          case OrientationReading.TopDown:
+              return "Top Down"
+              break;
+          case OrientationReading.LeftUp:
+              return "Left Up"
+              break;
+          case OrientationReading.RightUp:
+              return "Right Up"
+              break;
+          case OrientationReading.FaceUp:
+              return "Face Up"
+              break;
+          case OrientationReading.FaceDown:
+              return "Face Down"
+              break;
+        };
+        return ""
     }
     Component.onCompleted: {
-     if (!accel.connectedToBackend) {
-         label.text = "Accelerometer sensor not connected to backend"
+     if (!orientationSensor.connectedToBackend) {
+         label.text = "Orientation sensor not connected to backend"
      }
     }
 
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -53,35 +80,25 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Qml Accelerometer")
-            }
+            width: orientationPage.width
+      //      spacing: Theme.paddingLarge
+
             Label {
                 id: label
-                x: Theme.paddingLarge
-                text: "X: "+accel.reading.x+"\nY: "+ accel.reading.y +"\nZ: " + accel.reading.z
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+           //     x: Theme.paddingLarge
+                text: showOrientation(orientationSensor.reading.orientation)
+           //     color: Theme.secondaryHighlightColor
+           //     font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: accel.active ? "Stop" : "start"
+                text: orientationSensor.active ? "Stop" : "start"
                 onClicked: {
-                    accel.active = !accel.active
-                }
-            }
-            Button {
-                id: alwaysOnButton
-                text: accel.alwaysOn ? "Always On" : "Standby Off"
-                onClicked: {
-                 accel.alwaysOn = !accel.alwaysOn
+                    orientationSensor.active = !orientationSensor.active
                 }
             }
         }
     }
-    Component.onDestruction: console.log("accel destroyed")
 }
 
 

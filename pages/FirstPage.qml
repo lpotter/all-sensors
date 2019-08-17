@@ -29,13 +29,31 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "pages"
+import QtSensors 5.0
+import QtQuick.Controls 2.5
 
-ApplicationWindow
-{
-    initialPage: Component { FirstPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+Page {
+    id: page
+    header: Label {
+        text: qsTr("All Sensors")
+    }
+    Flickable {
+        anchors.fill: parent
+
+        //        PullDownMenu {
+        //            MenuItem {
+        //                text: qsTr("Show Page 2")
+        //                onClicked: pageStack.push(Qt.resolvedUrl("SecondPage.qml"))
+        //            }
+        //        }
+        Component.onCompleted: {
+            var types = QmlSensors.sensorTypes();
+            console.log("<<<<<<<<<<<<<<<<<<<<< sensor types")
+            console.log(types.join(", "));
+        }
+
+
+    }
 }
 
 

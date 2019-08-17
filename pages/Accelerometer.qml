@@ -29,21 +29,24 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
-
+    import QtQuick.Controls 2.5
 Page {
-    id: compassPage
-    Compass {
-        id: compass
+    id: accelPage
+    header: Label {
+        text: qsTr("QML Acceleromete")
+    }
+    Accelerometer {
+        id: accel
         dataRate: 5
     }
     Component.onCompleted: {
-     if (!compass.connectedToBackend) {
-         label.text = "Compass sensor not connected to backend"
+     if (!accel.connectedToBackend) {
+         label.text = "Accelerometer sensor not connected to backend"
      }
     }
-    SilicaFlickable {
+
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -51,34 +54,33 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("QML Compass")
-            }
+            width: accelPage.width
+       //     spacing: Theme.paddingLarge
+
             Label {
                 id: label
-                x: Theme.paddingLarge
-                text: "azimuth: "+compass.reading.azimuth+"\nCalibration level: "+ compass.reading.calibrationLevel
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+         //       x: Theme.paddingLarge
+                text: "X: "+accel.reading.x+"\nY: "+ accel.reading.y +"\nZ: " + accel.reading.z
+         //       color: Theme.secondaryHighlightColor
+         //       font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: compass.active ? "Stop" : "start"
+                text: accel.active ? "Stop" : "start"
                 onClicked: {
-                    compass.active = !compass.active
+                    accel.active = !accel.active
                 }
             }
             Button {
                 id: alwaysOnButton
-                text: compass.alwaysOn ? "Always On" : "Standby Off"
+                text: accel.alwaysOn ? "Always On" : "Standby Off"
                 onClicked: {
-                 compass.alwaysOn = !compass.alwaysOn
+                 accel.alwaysOn = !accel.alwaysOn
                 }
             }
         }
     }
+    Component.onDestruction: console.log("accel destroyed")
 }
 
 

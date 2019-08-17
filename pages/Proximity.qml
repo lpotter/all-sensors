@@ -29,47 +29,28 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 Page {
-    id: lightPage
+    id: proxyPage
+    header: Label {
+        text: qsTr("Proximity Sensor")
+    }
 
-    LightSensor {
-        id: light
-    }
-    AmbientLightSensor {
-        id: als
-    }
-    function showLevel(alsLevel) {
-        switch (alsLevel) {
-        case AmbientLightReading.Undefined:
-            return "Undefined";
-            break;
-        case AmbientLightReading.Dark:
-            return "Dark";
-            break;
-        case AmbientLightReading.Twilight:
-            return "Twilight";
-            break;
-        case AmbientLightReading.Light:
-            return "light";
-            break;
-        case AmbientLightReading.Bright:
-            return "Bright";
-            break;
-        case AmbientLightReading.Sunny:
-            return "Sunny";
-            break;
-        };
+    ProximitySensor {
+     id: prox
+     onErrorChanged: {
+     console.log("Error "+prox.error)
+     }
     }
     Component.onCompleted: {
-     if (!light.connectedToBackend) {
-         lightLabel.text = "AmbientLight sensor not connected to backend"
+     if (!prox.connectedToBackend) {
+         label.text = "Proximity sensor not connected to backend"
      }
     }
 
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -77,40 +58,21 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Light Sensor")
-            }
-            Label {
-                id: lightLabel
-                x: Theme.paddingLarge
-                text: light.reading.illuminance
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
-            }
+            width: proxyPage.width
+         //   spacing: Theme.paddingLarge
 
             Label {
-                id: alsLabel
-                x: Theme.paddingLarge
-                text: showLevel(als.reading.lightLevel)
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+                id: label
+          //      x: Theme.paddingLarge
+                text: prox.reading.near ? "near" : "far"
+           //     color: Theme.secondaryHighlightColor
+          //      font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: light.active && als.active ? "Stop" : "start"
+                text: prox.active ? "Stop" : "start"
                 onClicked: {
-                    light.active = !light.active
-                    als.active = !als.active
-                }
-            }
-            Button {
-                id: alwaysOnButton
-                text: light.alwaysOn && als.alwaysOn ? "Always On" : "Standby Off"
-                onClicked: {
-                 light.alwaysOn = !light.alwaysOn
-                    als.alwaysOn  = !als.alwaysOn
+                    prox.active = !prox.active
                 }
             }
         }

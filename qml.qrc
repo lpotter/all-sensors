@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>pages/Accelerometer.qml</file>
+        <file>pages/Compass.qml</file>
+        <file>pages/FirstPage.qml</file>
+        <file>pages/Gyroscope.qml</file>
+        <file>pages/Light.qml</file>
+        <file>pages/Magnetometer.qml</file>
+        <file>pages/Orientation.qml</file>
+        <file>pages/Proximity.qml</file>
+        <file>pages/Rotation.qml</file>
+        <file>pages/Tilt.qml</file>
+    </qresource>
+</RCC>

@@ -28,24 +28,62 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifdef QT_QML_DEBUG
-#include <QtQuick>
-#endif
-
-#include <sailfishapp.h>
+import QtQuick 2.0
+import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 
-int main(int argc, char *argv[])
-{
-    // SailfishApp::main() will display "qml/template.qml", if you need more
-    // control over initialization, you can use:
-    //
-    //   - SailfishApp::application(int, char *[]) to get the QGuiApplication *
-    //   - SailfishApp::createView() to get a new QQuickView * instance
-    //   - SailfishApp::pathTo(QString) to get a QUrl to a resource file
-    //
-    // To display the view, call "show()" (will show fullscreen on device).
+Page {
+    id: magPage
+    header: Label {
+        text: qsTr("QML Magnetometer")
+    }
 
-    return SailfishApp::main(argc, argv);
+
+    Magnetometer {
+        id: mag
+        dataRate: 5
+
+    }
+    Component.onCompleted: {
+     if (!mag.connectedToBackend) {
+         label.text = "Magnetometer sensor not connected to backend"
+     }
+    }
+    Flickable {
+        anchors.fill: parent
+
+        contentHeight: column.height
+
+        Column {
+            id: column
+
+            width: magPage.width
+       //     spacing: Theme.paddingLarge
+
+            Label {
+                id: label
+        //        x: Theme.paddingLarge
+                text: "X: "+mag.reading.x+"\nY: "+ mag.reading.y +"\nZ: " + mag.reading.z
+        //        color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
+            }
+            Button {
+                id: button
+                text: mag.active ? "Stop" : "start"
+                onClicked: {
+                    mag.active = !mag.active
+                }
+            }
+            Button {
+                id: alwaysOnButton
+                text: mag.alwaysOn ? "Always On" : "Standby Off"
+                onClicked: {
+                 mag.alwaysOn = !mag.alwaysOn
+                }
+            }
+        }
+    }
 }
+
 

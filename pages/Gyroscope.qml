@@ -29,11 +29,15 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
+
 
 Page {
     id: gyroPage
+    header: Label {
+        text: qsTr("QML Gyroscope")
+    }
     Gyroscope {
         id: gyro
         dataRate: 5
@@ -44,7 +48,7 @@ Page {
      }
     }
 
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -53,17 +57,15 @@ Page {
             id: column
             anchors.fill: parent
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("QML Gyroscope")
-            }
+            width: gyroPage.width
+          //  spacing: Theme.paddingLarge
+
             Label {
                 id: label
-                x: Theme.paddingLarge
+         //       x: Theme.paddingLarge
                 text: "X: "+gyro.reading.x+"\nY: "+ gyro.reading.y +"\nZ: " + gyro.reading.z
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+        //        color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button

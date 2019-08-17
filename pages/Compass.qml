@@ -29,24 +29,25 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 Page {
-    id: rotationPage
+    id: compassPage
+    header: Label {
+        text: qsTr("QML Compass")
+    }
 
-    RotationSensor {
-        id: rotation
+    Compass {
+        id: compass
         dataRate: 5
     }
-
     Component.onCompleted: {
-     if (!rotation.connectedToBackend) {
-         label.text = "Rotation sensor not connected to backend"
+     if (!compass.connectedToBackend) {
+         label.text = "Compass sensor not connected to backend"
      }
     }
-
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -54,28 +55,31 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Qml Rotation")
-            }
+            width: compassPage.width
+      //      spacing: Theme.paddingLarge
             Label {
                 id: label
-                x: Theme.paddingLarge
-                text: "X: "+rotation.reading.x+"\nY: "+ rotation.reading.y +"\nZ: " + rotation.reading.z
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+        //        x: Theme.paddingLarge
+                text: "azimuth: "+compass.reading.azimuth+"\nCalibration level: "+ compass.reading.calibrationLevel
+        //        color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: rotation.active ? "Stop" : "start"
+                text: compass.active ? "Stop" : "start"
                 onClicked: {
-                    rotation.active = !rotation.active
+                    compass.active = !compass.active
+                }
+            }
+            Button {
+                id: alwaysOnButton
+                text: compass.alwaysOn ? "Always On" : "Standby Off"
+                onClicked: {
+                 compass.alwaysOn = !compass.alwaysOn
                 }
             }
         }
     }
-    Component.onDestruction: console.log("rotation destroyed")
 }
 
 

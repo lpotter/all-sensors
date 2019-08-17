@@ -29,22 +29,26 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 Page {
-    id: magPage
-    Magnetometer {
-        id: mag
-        dataRate: 5
-
+    id: tiltPage
+    header: Label {
+        text: qsTr("Qml Tilt")
     }
+    TiltSensor {
+        id: tilt
+        dataRate: 5
+    }
+
     Component.onCompleted: {
-     if (!mag.connectedToBackend) {
-         label.text = "Magnetometer sensor not connected to backend"
+     if (!tilt.connectedToBackend) {
+         label.text = "Tilt sensor not connected to backend"
      }
     }
-    SilicaFlickable {
+
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -52,34 +56,33 @@ Page {
         Column {
             id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("QML Magnetometer")
-            }
+            width: tiltPage.width
+       //     spacing: Theme.paddingLarge
+
             Label {
                 id: label
-                x: Theme.paddingLarge
-                text: "X: "+mag.reading.x+"\nY: "+ mag.reading.y +"\nZ: " + mag.reading.z
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+             //   x: Theme.paddingLarge
+                text: "X: "+tilt.reading.xRotation +"\nY: "+ tilt.reading.yRotation
+         //       color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: mag.active ? "Stop" : "start"
+                text: tilt.active ? "Stop" : "start"
                 onClicked: {
-                    mag.active = !mag.active
+                    tilt.active = !tilt.active
                 }
             }
             Button {
-                id: alwaysOnButton
-                text: mag.alwaysOn ? "Always On" : "Standby Off"
+                id: calibrateButton
+                text: "Calibrate angle"
                 onClicked: {
-                 mag.alwaysOn = !mag.alwaysOn
+                    tilt.calibrate()
                 }
             }
         }
     }
+    Component.onDestruction: console.log("tilt destroyed")
 }
 
 

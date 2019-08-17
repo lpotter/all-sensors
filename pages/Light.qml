@@ -29,46 +29,50 @@
 */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import QtSensors 5.0
+import QtQuick.Controls 2.5
 
 Page {
-    id: orientationPage
-
-    OrientationSensor {
-        id: orientationSensor
+    id: lightPage
+    header: Label {
+        text: qsTr("Light Sensor")
     }
 
-    function showOrientation(orient) {
-        switch (orient) {
-          case OrientationReading.TopUp:
-              return "Top Up"
-              break;
-          case OrientationReading.TopDown:
-              return "Top Down"
-              break;
-          case OrientationReading.LeftUp:
-              return "Left Up"
-              break;
-          case OrientationReading.RightUp:
-              return "Right Up"
-              break;
-          case OrientationReading.FaceUp:
-              return "Face Up"
-              break;
-          case OrientationReading.FaceDown:
-              return "Face Down"
-              break;
+    LightSensor {
+        id: light
+    }
+    AmbientLightSensor {
+        id: als
+    }
+    function showLevel(alsLevel) {
+        switch (alsLevel) {
+        case AmbientLightReading.Undefined:
+            return "Undefined";
+            break;
+        case AmbientLightReading.Dark:
+            return "Dark";
+            break;
+        case AmbientLightReading.Twilight:
+            return "Twilight";
+            break;
+        case AmbientLightReading.Light:
+            return "light";
+            break;
+        case AmbientLightReading.Bright:
+            return "Bright";
+            break;
+        case AmbientLightReading.Sunny:
+            return "Sunny";
+            break;
         };
-        return ""
     }
     Component.onCompleted: {
-     if (!orientationSensor.connectedToBackend) {
-         label.text = "Orientation sensor not connected to backend"
+     if (!light.connectedToBackend) {
+         lightLabel.text = "AmbientLight sensor not connected to backend"
      }
     }
 
-    SilicaFlickable {
+    Flickable {
         anchors.fill: parent
 
         contentHeight: column.height
@@ -77,22 +81,37 @@ Page {
             id: column
 
             width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Device Orientation")
-            }
+         //   spacing: Theme.paddingLarge
+
             Label {
-                id: label
-                x: Theme.paddingLarge
-                text: showOrientation(orientationSensor.reading.orientation)
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+                id: lightLabel
+        //        x: Theme.paddingLarge
+                text: light.reading.illuminance
+        //        color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
+            }
+
+            Label {
+                id: alsLabel
+         //       x: Theme.paddingLarge
+                text: showLevel(als.reading.lightLevel)
+        //        color: Theme.secondaryHighlightColor
+        //        font.pixelSize: Theme.fontSizeExtraLarge
             }
             Button {
                 id: button
-                text: orientationSensor.active ? "Stop" : "start"
+                text: light.active && als.active ? "Stop" : "start"
                 onClicked: {
-                    orientationSensor.active = !orientationSensor.active
+                    light.active = !light.active
+                    als.active = !als.active
+                }
+            }
+            Button {
+                id: alwaysOnButton
+                text: light.alwaysOn && als.alwaysOn ? "Always On" : "Standby Off"
+                onClicked: {
+                 light.alwaysOn = !light.alwaysOn
+                    als.alwaysOn  = !als.alwaysOn
                 }
             }
         }
