@@ -41,6 +41,7 @@ Page {
 
     OrientationSensor {
         id: orientationSensor
+        dataRate: dataRateSlider.value
     }
 
     function showOrientation(orient) {
@@ -97,6 +98,18 @@ Page {
                     orientationSensor.active = !orientationSensor.active
                 }
             }
+            Row {
+                Slider {
+                    id: dataRateSlider
+                    from: 0
+                    to: 200
+                    stepSize: 5
+                  }
+                Label {
+                    text: "Data Rate: " + dataRateSlider.value +" Hz"
+                }
+            }
+
         }
     }
 }

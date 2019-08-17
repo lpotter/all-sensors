@@ -25,7 +25,7 @@ ApplicationWindow {
         }
 
         Label {
-            text: "stackview"//stackView.currentItem.title
+            text: qtversion
             anchors.centerIn: parent
         }
     }

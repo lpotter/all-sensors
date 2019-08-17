@@ -40,7 +40,7 @@ Page {
 
     RotationSensor {
         id: rotation
-        dataRate: 5
+        dataRate: dataRateSlider.value
     }
 
     Component.onCompleted: {
@@ -74,6 +74,18 @@ Page {
                     rotation.active = !rotation.active
                 }
             }
+            Row {
+                Slider {
+                    id: dataRateSlider
+                    from: 0
+                    to: 200
+                    stepSize: 5
+                  }
+                Label {
+                    text: "Data Rate: " + dataRateSlider.value +" Hz"
+                }
+            }
+
         }
     }
     Component.onDestruction: console.log("rotation destroyed")

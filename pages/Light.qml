@@ -80,7 +80,7 @@ Page {
         Column {
             id: column
 
-            width: page.width
+            width: lightPage.width
          //   spacing: Theme.paddingLarge
 
             Label {
@@ -94,7 +94,7 @@ Page {
             Label {
                 id: alsLabel
          //       x: Theme.paddingLarge
-                text: showLevel(als.reading.lightLevel)
+                text: (als.reading.lightLevel > 0) ? showLevel(als.reading.lightLevel) : ""
         //        color: Theme.secondaryHighlightColor
         //        font.pixelSize: Theme.fontSizeExtraLarge
             }

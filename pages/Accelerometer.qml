@@ -38,7 +38,7 @@ Page {
     }
     Accelerometer {
         id: accel
-        dataRate: 5
+        dataRate: dataRateSlider.value
     }
     Component.onCompleted: {
      if (!accel.connectedToBackend) {
@@ -76,6 +76,17 @@ Page {
                 text: accel.alwaysOn ? "Always On" : "Standby Off"
                 onClicked: {
                  accel.alwaysOn = !accel.alwaysOn
+                }
+            }
+            Row {
+                Slider {
+                    id: dataRateSlider
+                    from: 0
+                    to: 200
+                    stepSize: 5
+                  }
+                Label {
+                    text: "Data Rate: " + dataRateSlider.value +" Hz"
                 }
             }
         }

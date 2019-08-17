@@ -40,7 +40,7 @@ Page {
     }
     Gyroscope {
         id: gyro
-        dataRate: 5
+        dataRate: dataRateSlider.value
     }
     Component.onCompleted: {
      if (!gyro.connectedToBackend) {
@@ -81,6 +81,18 @@ Page {
                  gyro.alwaysOn = !gyro.alwaysOn
                 }
             }
+            Row {
+                Slider {
+                    id: dataRateSlider
+                    from: 0
+                    to: 200
+                    stepSize: 5
+                  }
+                Label {
+                    text: "Data Rate: " + dataRateSlider.value +" Hz"
+                }
+            }
+
         }
     }
 }

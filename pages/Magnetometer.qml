@@ -42,7 +42,7 @@ Page {
 
     Magnetometer {
         id: mag
-        dataRate: 5
+        dataRate: dataRateSlider.value
 
     }
     Component.onCompleted: {
@@ -82,6 +82,18 @@ Page {
                  mag.alwaysOn = !mag.alwaysOn
                 }
             }
+            Row {
+                Slider {
+                    id: dataRateSlider
+                    from: 0
+                    to: 200
+                    stepSize: 5
+                  }
+                Label {
+                    text: "Data Rate: " + dataRateSlider.value +" Hz"
+                }
+            }
+
         }
     }
 }
